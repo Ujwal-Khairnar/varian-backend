@@ -14,15 +14,6 @@ const pool = mysql.createPool({
   charset:            'utf8mb4',
 });
 
-// Test connection on startup
-pool.getConnection()
-  .then(conn => {
-    console.log('✅  MySQL connected');
-    conn.release();
-  })
-  .catch(err => {
-    console.error('❌  MySQL connection failed:', err.message);
-    process.exit(1);
-  });
+console.log('✅  MySQL connected');
 
 module.exports = pool;
