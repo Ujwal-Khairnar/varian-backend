@@ -15,11 +15,19 @@ const app = express();
 // ── Security & utility middleware ─────────────────────────────────────────────
 app.use(helmet());
 app.use(cors({
-  origin: corsOrigin,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      'https://varian-globe.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:3000',
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 app.use(morgan(nodeEnv === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
